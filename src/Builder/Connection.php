@@ -304,7 +304,8 @@ class Connection
             \PDO::ATTR_CASE => \PDO::CASE_NATURAL,
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
             \PDO::ATTR_ORACLE_NULLS => \PDO::NULL_NATURAL,
-            \PDO::ATTR_STRINGIFY_FETCHES => false
+            \PDO::ATTR_STRINGIFY_FETCHES => false,
+            \PDO::ATTR_EMULATE_PREPARES => false
         ];
         return array_diff_key($default, $options) + $options;
     }
