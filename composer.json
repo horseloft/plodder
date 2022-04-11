@@ -1,0 +1,21 @@
+{
+  "name": "horseloft/database",
+  "type": "library",
+  "description": "A PHP PDO Library Only supports MySQL and SQLServer",
+  "keywords": ["PDO", "MySQL", "SQLServer"],
+  "authors": [
+    {
+      "name": "YHC",
+      "homepage": "https://github.com/horseloft"
+    }
+  ],
+  "require": {
+    "php": ">=7.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Horseloft\\Database\\": "src"
+    }
+  },
+  "license": "MIT"
+}
