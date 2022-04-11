@@ -1,6 +1,6 @@
 <?php
 
-namespace Horseloft\Database\Builder;
+namespace Horseloft\Plodder\Builder;
 
 trait SelectBuilder
 {

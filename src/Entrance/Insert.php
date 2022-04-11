@@ -1,15 +1,15 @@
 <?php
 
-namespace Horseloft\Database\Entrance;
+namespace Horseloft\Plodder\Entrance;
 
-use Horseloft\Database\Builder\Core;
-use Horseloft\Database\Builder\ExecuteBuilder;
+use Horseloft\Plodder\Builder\Core;
+use Horseloft\Plodder\Builder\ExecuteBuilder;
 
 /**
  * 必须调用execute()才会执行insert
  *
  * Class Insert
- * @package Horseloft\Database\Entrance
+ * @package Horseloft\Plodder\Entrance
  */
 class Insert extends Core
 {

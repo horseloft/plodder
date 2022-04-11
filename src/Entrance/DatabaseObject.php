@@ -1,16 +1,16 @@
 <?php
 
-namespace Horseloft\Database\Entrance;
+namespace Horseloft\Plodder\Entrance;
 
-use Horseloft\Database\Builder\Connection;
-use Horseloft\Database\Builder\StatementBuilder;
-use Horseloft\Database\HorseloftDatabaseException;
+use Horseloft\Plodder\Builder\Connection;
+use Horseloft\Plodder\Builder\StatementBuilder;
+use Horseloft\Plodder\HorseloftPlodderException;
 
 /**
  * 可以使用PDO原生语句
  *
  * Class DataObject
- * @package Horseloft\Database\Entrance
+ * @package Horseloft\Plodder\Entrance
  */
 class DatabaseObject
 {
@@ -53,7 +53,7 @@ class DatabaseObject
         $stmt = $this->connect->query($sql, \PDO::FETCH_ASSOC);
 
         if ($stmt == false) {
-            throw new HorseloftDatabaseException($this->connect->errorInfo()[2]);
+            throw new HorseloftPlodderException($this->connect->errorInfo()[2]);
         }
         return $stmt;
     }
@@ -137,7 +137,7 @@ class DatabaseObject
     {
         $sql = trim($sql);
         if (empty($sql)) {
-            throw new HorseloftDatabaseException('Parameter cannot be empty');
+            throw new HorseloftPlodderException('Parameter cannot be empty');
         }
         return $sql;
     }

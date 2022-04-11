@@ -1,8 +1,8 @@
 <?php
 
-namespace Horseloft\Database;
+namespace Horseloft\Plodder;
 
-use Horseloft\Database\Entrance\DatabaseObject;
+use Horseloft\Plodder\Entrance\DatabaseObject;
 
 /**
  * @method static \PDOStatement query(string $sql)
@@ -75,7 +75,7 @@ class DataObject
         $cls = new \ReflectionClass($pdo);
 
         if (!$cls->hasMethod($name)) {
-            throw new HorseloftDatabaseException('Call to undefined method Horseloft\Database\DataObject::' . $name . '()');
+            throw new HorseloftPlodderException('Call to undefined method Horseloft\Plodder\DataObject::' . $name . '()');
         }
         $method = $cls->getMethod($name);
 

@@ -1,16 +1,16 @@
 <?php
 
-namespace Horseloft\Database\Entrance;
+namespace Horseloft\Plodder\Entrance;
 
-use Horseloft\Database\Builder\Core;
-use Horseloft\Database\Builder\ConditionBuilder;
-use Horseloft\Database\Builder\SelectBuilder;
+use Horseloft\Plodder\Builder\Core;
+use Horseloft\Plodder\Builder\ConditionBuilder;
+use Horseloft\Plodder\Builder\SelectBuilder;
 
 /**
  * 必须调用first()/all()/count()才会执行select
  *
  * Class Select
- * @package Horseloft\Database\Entrance
+ * @package Horseloft\Plodder\Entrance
  */
 class Select extends Core
 {

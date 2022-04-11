@@ -1,16 +1,16 @@
 <?php
 
-namespace Horseloft\Database\Entrance;
+namespace Horseloft\Plodder\Entrance;
 
-use Horseloft\Database\Builder\Core;
-use Horseloft\Database\Builder\ConditionBuilder;
-use Horseloft\Database\Builder\ExecuteBuilder;
+use Horseloft\Plodder\Builder\Core;
+use Horseloft\Plodder\Builder\ConditionBuilder;
+use Horseloft\Plodder\Builder\ExecuteBuilder;
 
 /**
  * 必须调用execute()才会执行update
  *
  * Class Update
- * @package Horseloft\Database\Entrance
+ * @package Horseloft\Plodder\Entrance
  */
 class Update extends Core
 {

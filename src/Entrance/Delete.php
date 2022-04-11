@@ -1,16 +1,16 @@
 <?php
 
-namespace Horseloft\Database\Entrance;
+namespace Horseloft\Plodder\Entrance;
 
-use Horseloft\Database\Builder\Core;
-use Horseloft\Database\Builder\ExecuteBuilder;
-use Horseloft\Database\Builder\ConditionBuilder;
+use Horseloft\Plodder\Builder\Core;
+use Horseloft\Plodder\Builder\ExecuteBuilder;
+use Horseloft\Plodder\Builder\ConditionBuilder;
 
 /**
  * 必须调用execute()才会执行delete
  *
  * Class Delete
- * @package Horseloft\Database\Entrance
+ * @package Horseloft\Plodder\Entrance
  */
 class Delete extends Core
 {

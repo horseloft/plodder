@@ -1,7 +1,7 @@
 {
-  "name": "horseloft/database",
+  "name": "horseloft/plodder",
   "type": "library",
-  "description": "A PHP PDO Library Only supports MySQL and SQLServer",
+  "description": "A PHP PDO Library",
   "keywords": ["PDO", "MySQL", "SQLServer"],
   "authors": [
     {
@@ -14,7 +14,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Horseloft\\Database\\": "src"
+      "Horseloft\\Plodder\\": "src"
     }
   },
   "license": "MIT"

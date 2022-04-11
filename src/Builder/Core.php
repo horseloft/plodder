@@ -1,8 +1,8 @@
 <?php
 
-namespace Horseloft\Database\Builder;
+namespace Horseloft\Plodder\Builder;
 
-use Horseloft\Database\HorseloftDatabaseException;
+use Horseloft\Plodder\HorseloftPlodderException;
 
 class Core
 {
@@ -145,7 +145,7 @@ class Core
                 $string = 'insert into ' . $this->packageColumn($this->table) . $this->insertSql;
                 break;
             default:
-                throw new HorseloftDatabaseException('Unsupported operation:' . $this->header);
+                throw new HorseloftPlodderException('Unsupported operation:' . $this->header);
         }
 
         // join
@@ -273,7 +273,7 @@ class Core
     private function setQueryBuilder(array $data)
     {
         if (empty($data)) {
-            throw new HorseloftDatabaseException('Empty update');
+            throw new HorseloftPlodderException('Empty update');
         }
         $arr = [];
         $str = ' set ';
@@ -281,12 +281,12 @@ class Core
             if (is_string($key)) {
                 $str .= $this->packageColumn($key) . ' = ?,';
             } else {
-                throw new HorseloftDatabaseException('Unsupported column:' . $key);
+                throw new HorseloftPlodderException('Unsupported column:' . $key);
             }
             if (is_string($value) || is_numeric($value) || is_null($value)) {
                 $arr[] = $value;
             } else {
-                throw new HorseloftDatabaseException('Unsupported column:' . $key);
+                throw new HorseloftPlodderException('Unsupported column:' . $key);
             }
         }
         $this->setParam = $arr;
@@ -302,7 +302,7 @@ class Core
     private function insertAnalyze(array $data)
     {
         if (empty($data)) {
-            throw new HorseloftDatabaseException('data not allowed to be empty');
+            throw new HorseloftPlodderException('data not allowed to be empty');
         }
         if (is_numeric(array_keys($data)[0]) && is_array($data[array_keys($data)[0]])) {
             //如果数组的第一个下标是数字，判定参数是二维数组
@@ -337,7 +337,7 @@ class Core
     {
         foreach ($data as $key => $value) {
             if (empty($value)) {
-                throw new HorseloftDatabaseException(' data not allowed to be empty');
+                throw new HorseloftPlodderException(' data not allowed to be empty');
             }
 
             if ($key == 0) {
@@ -373,14 +373,14 @@ class Core
         $params = [];
         foreach ($insert as $key => $value) {
             if (!is_string($key)) {
-                throw new HorseloftDatabaseException('Unsupported column:' . $key);
+                throw new HorseloftPlodderException('Unsupported column:' . $key);
             }
 
             if (is_string($value) || is_numeric($value) || is_null($value)) {
                 $columns .= '?,';
                 $params[] = $value;
             } else {
-                throw new HorseloftDatabaseException('Unsupported column:' . $key);
+                throw new HorseloftPlodderException('Unsupported column:' . $key);
             }
 
             if ($isNeedColumn) {
@@ -426,7 +426,7 @@ class Core
             if (is_array($value)) {
                 if (key($value) == 'string') {
                     if (!is_string(end($value))) {
-                        throw new HorseloftDatabaseException('Unsupported column value');
+                        throw new HorseloftPlodderException('Unsupported column value');
                     }
                     $sql .= $this->packageColumn($key) . ' ' . end($value) . ' and ';
                 } else {
@@ -477,10 +477,10 @@ class Core
     {
         $content = current($condition);
         if ($content === false) {
-            throw new HorseloftDatabaseException('Unsupported query method');
+            throw new HorseloftPlodderException('Unsupported query method');
         }
         if (is_array($content) && count($content) == 0) {
-            throw new HorseloftDatabaseException('Unsupported query method');
+            throw new HorseloftPlodderException('Unsupported query method');
         }
 
         switch (key($condition)) {
@@ -554,7 +554,7 @@ class Core
                 ];
                 break;
             default:
-                throw new HorseloftDatabaseException('Unsupported query method : ' . key($condition));
+                throw new HorseloftPlodderException('Unsupported query method : ' . key($condition));
         }
         return $result;
     }

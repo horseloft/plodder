@@ -1,8 +1,8 @@
 <?php
 
-namespace Horseloft\Database\Builder;
+namespace Horseloft\Plodder\Builder;
 
-use Horseloft\Database\HorseloftDatabaseException;
+use Horseloft\Plodder\HorseloftPlodderException;
 
 class Connection
 {
@@ -130,7 +130,7 @@ class Connection
     private static function connectionKey($connection)
     {
         if (empty($connection) || (!is_string($connection) && !is_array($connection))) {
-            throw new HorseloftDatabaseException('empty connection');
+            throw new HorseloftPlodderException('empty connection');
         }
         return self::keyEncode($connection);
     }
@@ -174,7 +174,7 @@ class Connection
                 $use = $config['write'] ?? [];
             }
             if (empty($use)) {
-                throw new HorseloftDatabaseException('empty database config');
+                throw new HorseloftPlodderException('empty database config');
             }
         }
 
@@ -222,7 +222,7 @@ class Connection
             $options = self::getConnectionOptions($config);
             $connect = new \PDO($dsn, $config['username'], $config['password'], $options);
         }catch (\PDOException $e) {
-            throw new HorseloftDatabaseException($e->getMessage());
+            throw new HorseloftPlodderException($e->getMessage());
         }
         return $connect;
     }
@@ -282,7 +282,7 @@ class Connection
                     . self::getCharset($config);
                 break;
             default:
-                throw new HorseloftDatabaseException('Unsupported driver:' . $config['driver']);
+                throw new HorseloftPlodderException('Unsupported driver:' . $config['driver']);
         }
         return $dsn;
     }
@@ -404,7 +404,7 @@ class Connection
     private static function connectionToConfig($connection)
     {
         if (empty($connection)) {
-            throw new HorseloftDatabaseException('empty connection');
+            throw new HorseloftPlodderException('empty connection');
         }
         //如果是数组格式 则返回
         if (is_array($connection)) {
@@ -413,7 +413,7 @@ class Connection
 
         //字符串格式 则尝试读取已配置的数据库配置文件
         if (!is_string($connection)) {
-            throw new HorseloftDatabaseException('Unsupported connection type');
+            throw new HorseloftPlodderException('Unsupported connection type');
         }
 
         //horseloft-php的数据库配置文件
@@ -431,7 +431,7 @@ class Connection
         if (function_exists('database_path') && function_exists('config')) {
             return config('database.connections.' . $connection);
         }
-        throw new HorseloftDatabaseException('Unsupported connection');
+        throw new HorseloftPlodderException('Unsupported connection');
     }
 
     /**
@@ -444,18 +444,18 @@ class Connection
     private static function getConfigData(string $connection, $configData)
     {
         if (empty($configData) || !is_array($configData)) {
-            throw new HorseloftDatabaseException('database config data error');
+            throw new HorseloftPlodderException('database config data error');
         }
         //$connection 可以是包含.的字符串
         $connectionNameList = explode('.', $connection);
         foreach ($connectionNameList as $name) {
             if (!isset($configData[$name])) {
-                throw new HorseloftDatabaseException('empty database config: ' . $connection);
+                throw new HorseloftPlodderException('empty database config: ' . $connection);
             }
             $configData = $configData[$name];
         }
         if (!is_array($configData)) {
-            throw new HorseloftDatabaseException('connection type must be array');
+            throw new HorseloftPlodderException('connection type must be array');
         }
         return $configData;
     }
@@ -469,27 +469,27 @@ class Connection
     private static function checkDatabaseConfig(array $config)
     {
         if (empty($config['driver'])) {
-            throw new HorseloftDatabaseException('empty database driver');
+            throw new HorseloftPlodderException('empty database driver');
         }
 
         if (empty($config['host'])) {
-            throw new HorseloftDatabaseException('empty database host');
+            throw new HorseloftPlodderException('empty database host');
         }
 
         if (empty($config['port'])) {
-            throw new HorseloftDatabaseException('empty database port');
+            throw new HorseloftPlodderException('empty database port');
         }
 
         if (empty($config['username'])) {
-            throw new HorseloftDatabaseException('empty database username');
+            throw new HorseloftPlodderException('empty database username');
         }
 
         if (empty($config['password'])) {
-            throw new HorseloftDatabaseException('empty database password');
+            throw new HorseloftPlodderException('empty database password');
         }
 
         if (empty($config['database'])) {
-            throw new HorseloftDatabaseException('empty database name');
+            throw new HorseloftPlodderException('empty database name');
         }
         return $config;
     }

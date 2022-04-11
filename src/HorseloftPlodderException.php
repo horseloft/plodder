@@ -1,10 +1,10 @@
 <?php
 
-namespace Horseloft\Database;
+namespace Horseloft\Plodder;
 
 use Throwable;
 
-class HorseloftDatabaseException extends \RuntimeException
+class HorseloftPlodderException extends \RuntimeException
 {
     public function __construct($message = "", $code = 6006, Throwable $previous = null)
     {

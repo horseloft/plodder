@@ -1,8 +1,8 @@
 <?php
 
-namespace Horseloft\Database\Builder;
+namespace Horseloft\Plodder\Builder;
 
-use Horseloft\Database\HorseloftDatabaseException;
+use Horseloft\Plodder\HorseloftPlodderException;
 
 trait StatementBuilder
 {
@@ -20,28 +20,28 @@ trait StatementBuilder
             //SQL预处理
             $stmt = $this->connect->prepare($sql);
             if ($stmt == false) {
-                throw new HorseloftDatabaseException($stmt->errorInfo()[2]);
+                throw new HorseloftPlodderException($stmt->errorInfo()[2]);
             }
 
             //绑定参数
             $inc = 1;
             foreach ($param as $value) {
                 if ($stmt->bindValue($inc, $value) == false) {
-                    throw new HorseloftDatabaseException($stmt->errorInfo()[2]);
+                    throw new HorseloftPlodderException($stmt->errorInfo()[2]);
                 }
                 $inc++;
             }
 
             //执行动作
             if ($stmt->execute() == false) {
-                throw new HorseloftDatabaseException($stmt->errorInfo()[2]);
+                throw new HorseloftPlodderException($stmt->errorInfo()[2]);
             }
 
             //返回 \PDOStatement
             return $stmt;
 
         } catch (\Exception $e) {
-            throw new HorseloftDatabaseException($e->getMessage());
+            throw new HorseloftPlodderException($e->getMessage());
         }
     }
 

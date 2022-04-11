@@ -1,8 +1,8 @@
 <?php
 
-namespace Horseloft\Database;
+namespace Horseloft\Plodder;
 
-use Horseloft\Database\Builder\Connection;
+use Horseloft\Plodder\Builder\Connection;
 
 /**
  * @method static begin($connection)
@@ -42,7 +42,7 @@ class Transaction
             Connection::setTransactionResource(null);
         }
         if ($execute == false) {
-            throw new HorseloftDatabaseException('transaction error');
+            throw new HorseloftPlodderException('transaction error');
         }
     }
 }

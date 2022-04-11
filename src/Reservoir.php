@@ -1,16 +1,16 @@
 <?php
 
-namespace Horseloft\Database;
+namespace Horseloft\Plodder;
 
-use Horseloft\Database\Entrance\DatabaseObject;
-use Horseloft\Database\Entrance\Delete;
-use Horseloft\Database\Entrance\Insert;
-use Horseloft\Database\Entrance\Select;
-use Horseloft\Database\Entrance\Update;
+use Horseloft\Plodder\Entrance\DatabaseObject;
+use Horseloft\Plodder\Entrance\Delete;
+use Horseloft\Plodder\Entrance\Insert;
+use Horseloft\Plodder\Entrance\Select;
+use Horseloft\Plodder\Entrance\Update;
 
 /**
  * Class Reservoir
- * @package Horseloft\Database
+ * @package Horseloft\Plodder
  */
 class Reservoir
 {
