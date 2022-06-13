@@ -3,6 +3,7 @@
 namespace Horseloft\Plodder\Builder;
 
 use Exception;
+use Horseloft\Plodder\HorseloftPlodderException;
 use ReflectionClass;
 
 class Grille
@@ -27,12 +28,12 @@ class Grille
      *
      * @param string $name
      * @param bool $isNewInstance
-     * @return object|null
+     * @return mixed|object|ReflectionClass
      */
     public static function getClass(string $name, bool $isNewInstance = true)
     {
         if (!isset($name, self::$config)) {
-            return null;
+            throw new HorseloftPlodderException('error class name');
         }
         if (isset(self::$grille[$name])) {
             return self::$grille[$name];
@@ -47,23 +48,7 @@ class Grille
             self::$grille[$name] = $object;
             return $object;
         } catch (Exception $e){
-            return null;
+            throw new HorseloftPlodderException('reflection error');
         }
-    }
-
-    /**
-     * 类对象写入
-     *
-     * @param string $name
-     * @param $object
-     *
-     * @return void|null
-     */
-    public static function setClass(string $name, $object)
-    {
-        if (!in_array($name, self::$config, true) || in_array($name, self::$grille, true)) {
-            return null;
-        }
-        self::$grille[$name] = $object;
     }
 }

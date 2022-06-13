@@ -21,9 +21,9 @@ class Update extends Core
      * @param string $table
      * @param array $data
      */
-    public function __construct($connection, string $table, array $data)
+    public function init($connection, string $table, array $data)
     {
-        parent::__construct($connection, $table, self::UPDATE);
+        parent::initialize($connection, $table, self::UPDATE);
 
         $this->setItem = $data;
     }

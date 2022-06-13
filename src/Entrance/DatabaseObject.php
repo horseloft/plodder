@@ -31,9 +31,9 @@ class DatabaseObject
     /**
      * 配置连接项
      *
-     * @param string $connection
+     * @param $connection
      */
-    public function setConnection(string $connection)
+    public function setConnection($connection)
     {
         $this->databaseConfig = Connection::config($connection, 'PDO');
     }

@@ -69,6 +69,9 @@ class DataObject
     {
         $cls = Grille::getClass('DatabaseObject');
 
+        /**
+         * @see DatabaseObject::setConnection()
+         */
         $cls->setConnection(static::$connection);
 
         return $cls->$name(...$arguments);

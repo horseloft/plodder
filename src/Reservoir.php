@@ -2,6 +2,7 @@
 
 namespace Horseloft\Plodder;
 
+use Horseloft\Plodder\Builder\Grille;
 use Horseloft\Plodder\Entrance\DatabaseObject;
 use Horseloft\Plodder\Entrance\Delete;
 use Horseloft\Plodder\Entrance\Insert;
@@ -83,7 +84,14 @@ class Reservoir
      */
     public static function select(string $column = '*'): Select
     {
-        return new Select(static::$connection, static::$table, $column);
+        $object = Grille::getClass('Select');
+
+        /**
+         * @see Select::init()
+         */
+        $object->init(static::$connection, static::$table, $column);
+
+        return $object;
     }
 
     /**
@@ -94,7 +102,14 @@ class Reservoir
      */
     public static function update(array $data): Update
     {
-        return new Update(static::$connection, static::$table, $data);
+        $object = Grille::getClass('Update');
+
+        /**
+         * @see Update::init()
+         */
+        $object->init(static::$connection, static::$table, $data);
+
+        return $object;
     }
 
     /**
@@ -105,7 +120,14 @@ class Reservoir
      */
     public static function insert(array $data): Insert
     {
-        return new Insert(static::$connection, static::$table, $data);
+        $object = Grille::getClass('Insert');
+
+        /**
+         * @see Insert::init()
+         */
+        $object->init(static::$connection, static::$table, $data);
+
+        return $object;
     }
 
     /**
@@ -115,7 +137,14 @@ class Reservoir
      */
     public static function delete(): Delete
     {
-        return new Delete(static::$connection, static::$table);
+        $object = Grille::getClass('Delete');
+
+        /**
+         * @see Delete::init()
+         */
+        $object->init(static::$connection, static::$table);
+
+        return $object;
     }
 
     /**
@@ -125,6 +154,13 @@ class Reservoir
      */
     public static function pdo(): DatabaseObject
     {
-        return new DatabaseObject(static::$connection);
+        $object = Grille::getClass('DatabaseObject');
+
+        /**
+         * @see DatabaseObject::setConnection()
+         */
+        $object->setConnection(self::$connection);
+
+        return $object;
     }
 }

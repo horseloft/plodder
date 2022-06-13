@@ -73,7 +73,7 @@ class Core
      * @param string $table
      * @param string $type
      */
-    public function __construct($connection, string $table, string $type)
+    public function initialize($connection, string $table, string $type)
     {
         $this->table = $table;
 
