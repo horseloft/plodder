@@ -32,6 +32,8 @@ class DatabaseObject
      * 配置连接项
      *
      * @param $connection
+     *
+     * @internal
      */
     public function setConnection($connection)
     {

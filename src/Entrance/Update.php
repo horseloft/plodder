@@ -20,6 +20,8 @@ class Update extends Core
      * @param string|array $connection
      * @param string $table
      * @param array $data
+     *
+     * @internal
      */
     public function init($connection, string $table, array $data)
     {

@@ -20,6 +20,8 @@ class Select extends Core
      * @param string|array $connection
      * @param string $table
      * @param string $column
+     *
+     * @internal
      */
     public function init($connection, string $table, string $column)
     {

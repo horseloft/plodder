@@ -6,6 +6,12 @@ use Horseloft\Plodder\Builder\Grille;
 use Horseloft\Plodder\Entrance\DatabaseObject;
 
 /**
+ * @see DatabaseObject::query()
+ * @see DatabaseObject::fetch()
+ * @see DatabaseObject::fetchAll()
+ * @see DatabaseObject::exec()
+ * @see DatabaseObject::lastInsertId()
+ *
  * @mixin DatabaseObject
  */
 class DataObject

@@ -19,6 +19,8 @@ class Delete extends Core
     /**
      * @param string|array $connection
      * @param string $table
+     *
+     * @internal
      */
     public function init($connection, string $table)
     {

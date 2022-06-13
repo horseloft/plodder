@@ -72,6 +72,8 @@ class Core
      * @param string|array $connection
      * @param string $table
      * @param string $type
+     *
+     * @internal
      */
     public function initialize($connection, string $table, string $type)
     {
