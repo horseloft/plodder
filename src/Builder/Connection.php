@@ -111,6 +111,8 @@ class Connection
      */
     public static function config($connection, string $header): array
     {
+        $connection = self::getConnection($connection);
+
         $connectionKey = self::connectionKey($connection);
 
         if (!is_null(self::$transactionResource) && self::$transactionKey == $connectionKey) {
@@ -402,6 +404,40 @@ class Connection
     }
 
     /**
+     * 获取链接名称|配置
+     *
+     * @param $connection
+     *
+     * @return array|mixed|string
+     */
+    private static function getConnection($connection)
+    {
+        //如果是数组格式 则返回
+        if (is_array($connection)) {
+            return $connection;
+        }
+
+        //horseloft-php的数据库配置文件 兼容laravel框架的数据库配置文件
+        if ((isset($GLOBALS['_HORSELOFT_CORE_CONTAINER_']) || function_exists('database_path')) && function_exists('config')) {
+            if (empty($connection)) {
+                $connection = config('database.default');
+            }
+            if (empty($connection)) {
+                throw new HorseloftPlodderException('empty database connection');
+            }
+            return $connection;
+        }
+
+        //如果定义了常量 APP_DATABASE_CONFIG_FILE 并且常量是文件 则读取文件内容
+        if (defined('APP_DATABASE_CONFIG_FILE') && is_file(APP_DATABASE_CONFIG_FILE)) {
+            $databaseConfigData = require APP_DATABASE_CONFIG_FILE;
+            return self::getDatabaseConfigConnection($connection, $databaseConfigData);
+        }
+
+        throw new HorseloftPlodderException('Unsupported connection');
+    }
+
+    /**
      * 获取数组格式的连接配置信息
      *
      * @param string|array $connection
@@ -409,61 +445,69 @@ class Connection
      */
     private static function connectionToConfig($connection): array
     {
-        if (empty($connection)) {
-            throw new HorseloftPlodderException('empty connection');
-        }
         //如果是数组格式 则返回
         if (is_array($connection)) {
             return $connection;
         }
 
-        //字符串格式 则尝试读取已配置的数据库配置文件
-        if (!is_string($connection)) {
-            throw new HorseloftPlodderException('Unsupported connection type');
-        }
-
-        //horseloft-php的数据库配置文件
-        if (isset($GLOBALS['_HORSELOFT_CORE_CONTAINER_']) && function_exists('config')) {
-            return config('database.' . $connection);
+        //horseloft-php的数据库配置文件 兼容laravel框架的数据库配置文件
+        if ((isset($GLOBALS['_HORSELOFT_CORE_CONTAINER_']) || function_exists('database_path')) && function_exists('config')) {
+            return config('database.connections.' . $connection);
         }
 
         //如果定义了常量 APP_DATABASE_CONFIG_FILE 并且常量是文件 则读取文件内容
         if (defined('APP_DATABASE_CONFIG_FILE') && is_file(APP_DATABASE_CONFIG_FILE)) {
             $databaseConfigData = require APP_DATABASE_CONFIG_FILE;
-            return self::getConfigData($connection, $databaseConfigData);
+            return self::getDatabaseConfigData($connection, $databaseConfigData);
         }
 
-        //兼容laravel框架的数据库配置文件
-        if (function_exists('database_path') && function_exists('config')) {
-            return config('database.connections.' . $connection);
-        }
         throw new HorseloftPlodderException('Unsupported connection');
     }
 
     /**
-     * 读取指定的配置文件
+     * 获取自定义配置的连接名称
+     *
+     * @param string|null $connection
+     * @param $configData
+     *
+     * @return mixed
+     */
+    private static function getDatabaseConfigConnection(?string $connection, $configData)
+    {
+        if (empty($connection)) {
+            if (empty($configData['default'])) {
+                throw new HorseloftPlodderException('empty connection');
+            }
+            $connection = $configData['default'];
+        }
+        return $connection;
+    }
+
+    /**
+     * 读取自定义的配置文件
      *
      * @param string $connection
      * @param $configData
      * @return array
      */
-    private static function getConfigData(string $connection, $configData): array
+    private static function getDatabaseConfigData(string $connection, $configData): array
     {
-        if (empty($configData) || !is_array($configData)) {
+        if (!is_array($configData) || empty($configData['connections']) || !is_array($configData['connections'])) {
             throw new HorseloftPlodderException('database config data error');
         }
+
         //$connection 可以是包含.的字符串
+        $databaseConfig = [];
         $connectionNameList = explode('.', $connection);
         foreach ($connectionNameList as $name) {
-            if (!isset($configData[$name])) {
-                throw new HorseloftPlodderException('empty database config: ' . $connection);
+            if (isset($configData['connections'][$name]) && is_array($configData['connections'][$name])) {
+                $databaseConfig = $configData['connections'][$name];
             }
-            $configData = $configData[$name];
         }
-        if (!is_array($configData)) {
-            throw new HorseloftPlodderException('connection type must be array');
+        if (empty($databaseConfig)) {
+            throw new HorseloftPlodderException('empty connection config');
         }
-        return $configData;
+        return $databaseConfig;
     }
 
     /**
