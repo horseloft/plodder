@@ -2,9 +2,8 @@
 
 namespace Horseloft\Plodder;
 
+use Horseloft\Plodder\Builder\Grille;
 use Horseloft\Plodder\Entrance\DatabaseObject;
-use ReflectionClass;
-use ReflectionException;
 
 /**
  * @mixin DatabaseObject
@@ -65,18 +64,13 @@ class DataObject
      * @param $name
      * @param $arguments
      * @return mixed
-     * @throws ReflectionException
      */
     public static function __callStatic($name, $arguments)
     {
-        $pdo = new DatabaseObject(static::$connection);
-        $cls = new ReflectionClass($pdo);
+        $cls = Grille::getClass('DatabaseObject');
 
-        if (!$cls->hasMethod($name)) {
-            throw new HorseloftPlodderException('Call to undefined method Horseloft\Plodder\DataObject::' . $name . '()');
-        }
-        $method = $cls->getMethod($name);
+        $cls->setConnection(static::$connection);
 
-        return $method->invoke($pdo, ...$arguments);
+        return $cls->$name(...$arguments);
     }
 }
