@@ -17,7 +17,7 @@ trait ExecuteBuilder
      *
      * @return int
      */
-    public function execute()
+    public function execute(): int
     {
         $statement = $this->statement($this->toSql(), $this->getSqlParam());
 

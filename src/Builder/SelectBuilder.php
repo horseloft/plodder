@@ -55,7 +55,7 @@ trait SelectBuilder
      *
      * @return array
      */
-    public function first()
+    public function first(): array
     {
         $this->limitItem = [
             'limit' => $this->limitItem['limit'] ?? 0,
@@ -69,7 +69,7 @@ trait SelectBuilder
      *
      * @return array
      */
-    public function all()
+    public function all(): array
     {
         return $this->fetch(true);
     }
@@ -79,7 +79,7 @@ trait SelectBuilder
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         $this->isCount = true;
 
@@ -125,7 +125,7 @@ trait SelectBuilder
      * @param bool $isFetchAll
      * @return array
      */
-    private function fetch(bool $isFetchAll)
+    private function fetch(bool $isFetchAll): array
     {
         $statement = $this->statement($this->toSql(), $this->getSqlParam());
 

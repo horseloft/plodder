@@ -3,6 +3,9 @@
 namespace Horseloft\Plodder\Builder;
 
 use Horseloft\Plodder\HorseloftPlodderException;
+use PDO;
+use PDOStatement;
+use Throwable;
 
 trait StatementBuilder
 {
@@ -11,9 +14,9 @@ trait StatementBuilder
      *
      * @param string $sql
      * @param array $param
-     * @return \PDOStatement
+     * @return PDOStatement
      */
-    protected function statement(string $sql, array $param = [])
+    protected function statement(string $sql, array $param = []): PDOStatement
     {
         $this->connect = Connection::connect($this->databaseConfig);
         try {
@@ -40,7 +43,7 @@ trait StatementBuilder
             //返回 \PDOStatement
             return $stmt;
 
-        } catch (\Exception $e) {
+        } catch (Throwable $e) {
             throw new HorseloftPlodderException($e->getMessage());
         }
     }
@@ -48,16 +51,16 @@ trait StatementBuilder
     /**
      * PDO fetch查询
      *
-     * @param \PDOStatement $statement
+     * @param PDOStatement $statement
      * @param bool $isFetchAll
      * @return array
      */
-    protected function fetchBuilder(\PDOStatement $statement, bool $isFetchAll = true)
+    protected function fetchBuilder(PDOStatement $statement, bool $isFetchAll = true): array
     {
         if ($isFetchAll) {
-            $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
         } else {
-            $result = $statement->fetch(\PDO::FETCH_ASSOC);
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
         }
         if ($result == false) {
             return [];

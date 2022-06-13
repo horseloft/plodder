@@ -81,7 +81,7 @@ class Reservoir
      * @param string $column
      * @return Entrance\Select
      */
-    public static function select(string $column = '*')
+    public static function select(string $column = '*'): Select
     {
         return new Select(static::$connection, static::$table, $column);
     }
@@ -92,7 +92,7 @@ class Reservoir
      * @param array $data
      * @return Entrance\Update
      */
-    public static function update(array $data)
+    public static function update(array $data): Update
     {
         return new Update(static::$connection, static::$table, $data);
     }
@@ -103,7 +103,7 @@ class Reservoir
      * @param array $data
      * @return Entrance\Insert
      */
-    public static function insert(array $data)
+    public static function insert(array $data): Insert
     {
         return new Insert(static::$connection, static::$table, $data);
     }
@@ -113,7 +113,7 @@ class Reservoir
      *
      * @return Entrance\Delete
      */
-    public static function delete()
+    public static function delete(): Delete
     {
         return new Delete(static::$connection, static::$table);
     }
@@ -123,7 +123,7 @@ class Reservoir
      *
      * @return DatabaseObject
      */
-    public static function pdo()
+    public static function pdo(): DatabaseObject
     {
         return new DatabaseObject(static::$connection);
     }

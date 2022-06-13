@@ -3,13 +3,11 @@
 namespace Horseloft\Plodder;
 
 use Horseloft\Plodder\Entrance\DatabaseObject;
+use ReflectionClass;
+use ReflectionException;
 
 /**
- * @method static \PDOStatement query(string $sql)
- * @method static array fetch(string $sql, ...$param)
- * @method static array fetchAll(string $sql, ...$param)
- * @method static int exec(string $sql, ...$param)
- * @method static string lastInsertId(string $column)
+ * @mixin DatabaseObject
  */
 class DataObject
 {
@@ -67,12 +65,12 @@ class DataObject
      * @param $name
      * @param $arguments
      * @return mixed
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function __callStatic($name, $arguments)
     {
         $pdo = new DatabaseObject(static::$connection);
-        $cls = new \ReflectionClass($pdo);
+        $cls = new ReflectionClass($pdo);
 
         if (!$cls->hasMethod($name)) {
             throw new HorseloftPlodderException('Call to undefined method Horseloft\Plodder\DataObject::' . $name . '()');

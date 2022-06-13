@@ -3,6 +3,7 @@
 namespace Horseloft\Plodder\Builder;
 
 use Horseloft\Plodder\HorseloftPlodderException;
+use PDO;
 
 class Core
 {
@@ -15,7 +16,7 @@ class Core
     private $databaseConfig;
 
     /**
-     * @var \PDO
+     * @var PDO
      */
     protected $connect = null;
 
@@ -97,7 +98,7 @@ class Core
      * @param string $table
      * @return $this
      */
-    public function table(string $table)
+    public function table(string $table): Core
     {
         $this->table = $table;
 
@@ -109,7 +110,7 @@ class Core
      *
      * @return string
      */
-    public function toCompleteSql()
+    public function toCompleteSql(): string
     {
         $string = $this->toSql();
         $param = $this->getSqlParam();
@@ -124,7 +125,7 @@ class Core
      * SQL语句
      * @return string
      */
-    public function toSql()
+    public function toSql(): string
     {
         switch($this->header) {
             case self::SELECT:
@@ -202,7 +203,7 @@ class Core
      *
      * @return array
      */
-    protected function getSqlParam()
+    protected function getSqlParam(): array
     {
         return array_merge($this->setParam, $this->whereParam);
     }
@@ -213,7 +214,7 @@ class Core
      * @param string $column
      * @return string
      */
-    protected function packageColumn(string $column)
+    protected function packageColumn(string $column): string
     {
         return $this->leftSign . $column . $this->rightSign;
     }
@@ -224,7 +225,7 @@ class Core
      * @param string $column
      * @return string
      */
-    protected function packageSelectColumn(string $column)
+    protected function packageSelectColumn(string $column): string
     {
         if (empty($column) || $column == '*') {
             return $column;
@@ -252,7 +253,7 @@ class Core
      *
      * @return string
      */
-    private function joinItemBuilder()
+    private function joinItemBuilder(): string
     {
         $str = '';
         foreach ($this->joinItem as $item) {
@@ -270,7 +271,7 @@ class Core
      * @param array $data
      * @return string
      */
-    private function setQueryBuilder(array $data)
+    private function setQueryBuilder(array $data): string
     {
         if (empty($data)) {
             throw new HorseloftPlodderException('Empty update');
@@ -361,7 +362,7 @@ class Core
      * @param bool $isNeedColumn
      * @return array
      */
-    private function insertExplode(array $insert, bool $isNeedColumn = true)
+    private function insertExplode(array $insert, bool $isNeedColumn = true): array
     {
         if ($isNeedColumn) {
             $columns = ' values (';
@@ -473,7 +474,7 @@ class Core
      * @param array $condition
      * @return array
      */
-    private function convert(array $condition)
+    private function convert(array $condition): array
     {
         $content = current($condition);
         if ($content === false) {

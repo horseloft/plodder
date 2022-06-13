@@ -3,6 +3,8 @@
 namespace Horseloft\Plodder\Builder;
 
 use Horseloft\Plodder\HorseloftPlodderException;
+use PDO;
+use PDOException;
 
 class Connection
 {
@@ -26,7 +28,7 @@ class Connection
     private static $resourceOrder = [];
 
     /**
-     * @var \PDO
+     * @var PDO
      */
     private static $transactionResource = null;
 
@@ -41,9 +43,9 @@ class Connection
     private static $transactionKey = null;
 
     /**
-     * @param \PDO|null $resource
+     * @param PDO|null $resource
      */
-    public static function setTransactionResource(?\PDO $resource)
+    public static function setTransactionResource(?PDO $resource)
     {
         self::$transactionResource = $resource;
     }
@@ -52,9 +54,9 @@ class Connection
      * 获取数据库连接资源
      *
      * @param array $config
-     * @return \PDO
+     * @return PDO
      */
-    public static function connect(array $config)
+    public static function connect(array $config): ?PDO
     {
         $configKey = self::keyEncode($config);
 
@@ -77,9 +79,9 @@ class Connection
      * 获取连接资源 用于事务
      *
      * @param $connection
-     * @return \PDO
+     * @return PDO
      */
-    public static function transaction($connection)
+    public static function transaction($connection): ?PDO
     {
         $connectionKey = self::connectionKey($connection);
 
@@ -107,7 +109,7 @@ class Connection
      * @param string $header
      * @return array
      */
-    public static function config($connection, string $header)
+    public static function config($connection, string $header): array
     {
         $connectionKey = self::connectionKey($connection);
 
@@ -127,7 +129,7 @@ class Connection
      * @param $connection
      * @return string
      */
-    private static function connectionKey($connection)
+    private static function connectionKey($connection): string
     {
         if (empty($connection) || (!is_string($connection) && !is_array($connection))) {
             throw new HorseloftPlodderException('empty connection');
@@ -139,7 +141,7 @@ class Connection
      * @param $key
      * @return string
      */
-    private static function keyEncode($key)
+    private static function keyEncode($key): string
     {
         return md5(serialize($key));
     }
@@ -152,7 +154,7 @@ class Connection
      * @param string $header
      * @return array
      */
-    private static function currentDatabaseConfig(array $config, bool $isTransaction, string $header = '')
+    private static function currentDatabaseConfig(array $config, bool $isTransaction, string $header = ''): array
     {
         if ($isTransaction) {
             if (isset($config['write'])) {
@@ -213,15 +215,15 @@ class Connection
      * ]
      *
      * @param array $config
-     * @return \PDO
+     * @return PDO
      */
-    private static function connectResource(array $config)
+    private static function connectResource(array $config): PDO
     {
         try {
             $dsn = self::getDsnString($config);
             $options = self::getConnectionOptions($config);
-            $connect = new \PDO($dsn, $config['username'], $config['password'], $options);
-        }catch (\PDOException $e) {
+            $connect = new PDO($dsn, $config['username'], $config['password'], $options);
+        }catch (PDOException $e) {
             throw new HorseloftPlodderException($e->getMessage());
         }
         return $connect;
@@ -230,11 +232,11 @@ class Connection
     /**
      * 验证当前连接是否有效
      *
-     * @param \PDO $pdo
+     * @param PDO $pdo
      * @param string $driver
      * @return bool
      */
-    private static function isActiveConnect(\PDO $pdo, string $driver)
+    private static function isActiveConnect(PDO $pdo, string $driver): bool
     {
         if ($driver == 'mysql') {
             $ping = 'select version()';
@@ -251,7 +253,7 @@ class Connection
      * @param array $config
      * @return string
      */
-    private static function getCharset(array $config)
+    private static function getCharset(array $config): string
     {
         return !empty($config['charset']) ? ';charset=' . $config['charset'] : '';
     }
@@ -260,7 +262,7 @@ class Connection
      * @param array $config
      * @return string
      */
-    private static function getDsnString(array $config)
+    private static function getDsnString(array $config): string
     {
         switch ($config['driver']) {
             case 'mysql':
@@ -294,17 +296,17 @@ class Connection
      *
      * @return array
      */
-    private static function getConnectionOptions(array $config)
+    private static function getConnectionOptions(array $config): array
     {
         $options = [];
         if (!empty($config['options']) && is_array($config['options'])) {
             $options = $config['options'];
         }
         $default = [
-            \PDO::ATTR_CASE => \PDO::CASE_NATURAL,
-            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-            \PDO::ATTR_ORACLE_NULLS => \PDO::NULL_NATURAL,
-            \PDO::ATTR_STRINGIFY_FETCHES => false
+            PDO::ATTR_CASE => PDO::CASE_NATURAL,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
+            PDO::ATTR_STRINGIFY_FETCHES => false
         ];
         return array_diff_key($default, $options) + $options;
     }
@@ -315,7 +317,7 @@ class Connection
      * @param $connection
      * @return array
      */
-    private static function connectionExplode($connection)
+    private static function connectionExplode($connection): array
     {
         $config = self::connectionToConfig($connection);
         $default = [
@@ -357,34 +359,16 @@ class Connection
      * @param array $default
      * @return array
      */
-    private static function configMultiple(array $config, array $default)
+    private static function configMultiple(array $config, array $default): array
     {
-        $default = [
-            'host' => $config['host'] ?? $default['host'],
-            'port' => $config['port'] ?? $default['port'],
-            'driver' => $config['driver'] ?? $default['driver'],
-            'charset' => $config['charset'] ?? $default['charset'],
-            'database' => $config['database'] ?? $default['database'],
-            'username' => $config['username'] ?? $default['username'],
-            'password' => $config['password'] ?? $default['password'],
-            'options' => $config['options'] ?? $default['options']
-        ];
+        $default = self::getConfigValue($config, $default);
         $multiple = [];
         $configKey = [
             'host', 'port', 'driver', 'database', 'username', 'password'
         ];
         foreach ($config as $item) {
             if (is_array($item) && !empty(array_intersect($configKey, array_keys($item)))) {
-                $multiple[] = self::checkDatabaseConfig([
-                    'host' => $item['host'] ?? $default['host'],
-                    'port' => $item['port'] ?? $default['port'],
-                    'driver' => $item['driver'] ?? $default['driver'],
-                    'charset' => $item['charset'] ?? $default['charset'],
-                    'database' => $item['database'] ?? $default['database'],
-                    'username' => $item['username'] ?? $default['username'],
-                    'password' => $item['password'] ?? $default['password'],
-                    'options' => $item['options'] ?? $default['options']
-                ]);
+                $multiple[] = self::checkDatabaseConfig(self::getConfigValue($item, $default));
                 continue;
             }
             if (!is_array($item)) {
@@ -396,12 +380,34 @@ class Connection
     }
 
     /**
+     * 获取数据库配置信息【缺省配置】
+     *
+     * @param array $config
+     * @param array $default
+     *
+     * @return array
+     */
+    private static function getConfigValue(array $config, array $default): array
+    {
+        return [
+            'host' => $config['host'] ?? $default['host'],
+            'port' => $config['port'] ?? $default['port'],
+            'driver' => $config['driver'] ?? $default['driver'],
+            'charset' => $config['charset'] ?? $default['charset'],
+            'database' => $config['database'] ?? $default['database'],
+            'username' => $config['username'] ?? $default['username'],
+            'password' => $config['password'] ?? $default['password'],
+            'options' => $config['options'] ?? $default['options']
+        ];
+    }
+
+    /**
      * 获取数组格式的连接配置信息
      *
      * @param string|array $connection
      * @return array
      */
-    private static function connectionToConfig($connection)
+    private static function connectionToConfig($connection): array
     {
         if (empty($connection)) {
             throw new HorseloftPlodderException('empty connection');
@@ -441,7 +447,7 @@ class Connection
      * @param $configData
      * @return array
      */
-    private static function getConfigData(string $connection, $configData)
+    private static function getConfigData(string $connection, $configData): array
     {
         if (empty($configData) || !is_array($configData)) {
             throw new HorseloftPlodderException('database config data error');
@@ -466,7 +472,7 @@ class Connection
      * @param array $config
      * @return array
      */
-    private static function checkDatabaseConfig(array $config)
+    private static function checkDatabaseConfig(array $config): array
     {
         if (empty($config['driver'])) {
             throw new HorseloftPlodderException('empty database driver');

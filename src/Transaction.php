@@ -3,6 +3,7 @@
 namespace Horseloft\Plodder;
 
 use Horseloft\Plodder\Builder\Connection;
+use PDO;
 
 /**
  * @method static begin($connection)
@@ -12,7 +13,7 @@ use Horseloft\Plodder\Builder\Connection;
 class Transaction
 {
     /**
-     * @var \PDO
+     * @var PDO
      */
     private static $connect = null;
 

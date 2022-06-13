@@ -5,6 +5,8 @@ namespace Horseloft\Plodder\Entrance;
 use Horseloft\Plodder\Builder\Connection;
 use Horseloft\Plodder\Builder\StatementBuilder;
 use Horseloft\Plodder\HorseloftPlodderException;
+use PDO;
+use PDOStatement;
 
 /**
  * 可以使用PDO原生语句
@@ -17,7 +19,7 @@ class DatabaseObject
     use StatementBuilder;
 
     /**
-     * @var \PDO
+     * @var PDO
      */
     protected $connect = '';
 
@@ -45,12 +47,12 @@ class DatabaseObject
      * 返回 FETCH_ASSOC 结果集
      *
      * @param string $sql
-     * @return \PDOStatement
+     * @return PDOStatement
      */
-    public function query(string $sql)
+    public function query(string $sql): PDOStatement
     {
         $sql = $this->getAndSet($sql);
-        $stmt = $this->connect->query($sql, \PDO::FETCH_ASSOC);
+        $stmt = $this->connect->query($sql, PDO::FETCH_ASSOC);
 
         if ($stmt == false) {
             throw new HorseloftPlodderException($this->connect->errorInfo()[2]);
@@ -67,7 +69,7 @@ class DatabaseObject
      * @param string|int|float|null ...$param
      * @return array
      */
-    public function fetch(string $sql, ...$param)
+    public function fetch(string $sql, ...$param): array
     {
         $sql = $this->getAndSet($sql);
         $statement = $this->statement($sql, $param);
@@ -84,7 +86,7 @@ class DatabaseObject
      * @param string|int|float|null ...$param
      * @return array
      */
-    public function fetchAll(string $sql, ...$param)
+    public function fetchAll(string $sql, ...$param): array
     {
         $sql = $this->getAndSet($sql);
         $statement = $this->statement($sql, $param);
@@ -106,7 +108,7 @@ class DatabaseObject
      * @param string|int|float|null ...$param
      * @return int
      */
-    public function exec(string $sql, ...$param)
+    public function exec(string $sql, ...$param): int
     {
         $sql = $this->getAndSet($sql);
 
@@ -124,7 +126,7 @@ class DatabaseObject
      * @param null $column
      * @return string
      */
-    public function lastInsertId($column = null)
+    public function lastInsertId($column = null): string
     {
         return $this->connect->lastInsertId($column);
     }
@@ -133,7 +135,7 @@ class DatabaseObject
      * @param string $sql
      * @return string
      */
-    private function getAndSet(string $sql)
+    private function getAndSet(string $sql): string
     {
         $sql = trim($sql);
         if (empty($sql)) {
