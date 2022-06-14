@@ -19,11 +19,9 @@ class Delete extends Core
     /**
      * @param string|array $connection
      * @param string $table
-     *
-     * @internal
      */
-    public function init($connection, string $table)
+    public function __construct($connection, string $table)
     {
-        parent::initialize($connection, $table, self::DELETE);
+        parent::__construct($connection, $table, self::DELETE);
     }
 }

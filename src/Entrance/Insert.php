@@ -19,12 +19,10 @@ class Insert extends Core
      * @param string|array $connection
      * @param string $table
      * @param array $data
-     *
-     * @internal
      */
-    public function init($connection, string $table, array $data)
+    public function __construct($connection, string $table, array $data)
     {
-        parent::initialize($connection, $table, self::INSERT);
+        parent::__construct($connection, $table, self::INSERT);
 
         $this->insertItem = $data;
     }

@@ -20,12 +20,10 @@ class Select extends Core
      * @param string|array $connection
      * @param string $table
      * @param string $column
-     *
-     * @internal
      */
-    public function init($connection, string $table, string $column)
+    public function __construct($connection, string $table, string $column)
     {
-        parent::initialize($connection, $table, self::SELECT);
+        parent::__construct($connection, $table, self::SELECT);
 
         $this->column = $column;
     }

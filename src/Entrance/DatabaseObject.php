@@ -29,14 +29,11 @@ class DatabaseObject
     private $databaseConfig;
 
     /**
-     * 配置连接项
-     *
-     * @param $connection
-     *
-     * @internal
+     * @param string|array $connection
      */
-    public function setConnection($connection)
+    public function __construct($connection)
     {
+        // 获取数组格式的连接配置信息
         $this->databaseConfig = Connection::config($connection, 'PDO');
     }
 
