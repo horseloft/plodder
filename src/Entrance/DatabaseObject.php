@@ -55,6 +55,9 @@ class DatabaseObject
     public function query(string $sql): PDOStatement
     {
         $sql = $this->getAndSet($sql);
+
+        $this->connect = Connection::connect($this->databaseConfig);
+
         $stmt = $this->connect->query($sql, PDO::FETCH_ASSOC);
 
         if ($stmt == false) {
