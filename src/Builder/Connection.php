@@ -83,6 +83,8 @@ class Connection
      */
     public static function transaction($connection): ?PDO
     {
+        $connection = self::getConnection($connection);
+
         $connectionKey = self::connectionKey($connection);
 
         // 事务过程中 相同的connection使用同一个连接资源

@@ -25,7 +25,12 @@ class Transaction
     {
         switch($name) {
             case 'begin':
-                self::$connect = Connection::transaction(...$arguments);
+                if (empty($arguments)) {
+                    $connection = null;
+                } else {
+                    $connection = $arguments[0];
+                }
+                self::$connect = Connection::transaction($connection);
                 $execute = self::$connect->beginTransaction();
                 break;
             case 'commit':
