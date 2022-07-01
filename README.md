@@ -2,13 +2,17 @@
 
 <h4 align="center">PHP PDO Library support for MySQL、SQLServer</h4>
 
-**封装了PDO类的操作，仅支持MySQL和SQLServer，对于SQLServer支持sqlsrv和dblib驱动**
+[参考文档](https://github.com/horseloft/plodder/wiki/document)
 
-[参考文档](https://github.com/horseloft/plodder/wiki)
+1. 第一位数字为主版本号，版本变更不向下兼容；用于整体功能升级和框架结构升级
+2. 第二位数字为子版本号，版本变更向下兼容；用于新增功能
+3. 第三位数字为修订版本号，版本变更向下兼容；用于BUG修复
+4. v1版本适用于: PHP >= 7.1
+5. v2版本适用于：PHP >= 8.1
 
 # 注意事项
 
-1. 目前仅做了MySQL和SQLServer的PDO封装
+1. 目前仅做了MySQL和SQLServer的PDO封装，对于SQLServer支持sqlsrv和dblib驱动
 
 2. $connection 数组中的driver仅支持赋值为：mysql 或 sqlserver/sqlsrv/dblib
 
